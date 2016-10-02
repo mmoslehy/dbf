@@ -1,0 +1,57 @@
+<html>
+
+<style>
+  .thumb {
+    height: 75px;
+    border: 1px solid #000;
+    margin: 10px 5px 0 0;
+  }
+</style>
+
+<script src="./dbf.js"></script>
+<input type="file" id="file"/>
+<output id="list"></output>
+<br>
+<button onclick=logBuffer()>Parse DBF</button>
+
+<script>
+
+var arrayBuffer = new ArrayBuffer();
+
+	function handleFileSelect(evt) {
+	
+	var f = evt.target.files[0]; // FileList object
+
+    var reader = new FileReader();
+
+	// Closure to capture the file information.
+	reader.onload = (function(theFile) {
+		return function(e) {
+		arrayBuffer = e.target.result;
+		};
+	})(f);
+
+	reader.readAsArrayBuffer(f);
+	}
+  
+  
+
+  document.getElementById('file').addEventListener('change', handleFileSelect, false);
+  
+  function logBuffer(){
+  if(arrayBuffer.byteLength>0){
+	DBFParser.load("someFileName", arrayBuffer, onSuccess, onErr);
+	}
+  else alert("Buffer is empty");
+  }
+  
+  function onSuccess(dbf){
+  console.log(dbf);
+  }
+  
+  function onErr(err){
+  console.error(err);
+  }
+</script>
+
+</html>
